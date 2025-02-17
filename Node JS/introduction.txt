@@ -1,0 +1,30 @@
+Topics:
+    1. Node.js Basics
+    2. Introduction to Node js
+    3. Install Node.js and npm
+    4. working with modules 
+    5. file system operations
+    6. HTTP modules
+
+1 and 2. Introduction of node js :-
+- js runtime environment
+- js se backend nahi ban sakta 
+- kyunki js ke pass wo functionality nahi hai jinse backend bana sake 
+- rayn dahl isne socha js se backend banna chhiye
+- google chrome ka v8 engine ka code sourse hai and rayn dahl us code main cheedkhaani kar raha hai
+- kyunki chrome ka v8 engine c++ mein bana hai
+- fir usne socha ki js se likhna hai     
+- hum js ka code likhe jo ki wrapper layer of js receive karegi and wo code v8 engine ke c++ modules ke saath ek server create karega.
+- node js is a js runtime environment
+              
+3. Install Node.js and npm:-
+node -v
+npm init //package.json
+
+5. file system operations:-
+writeFile
+appenFile
+copyFile
+rename
+unlink
+

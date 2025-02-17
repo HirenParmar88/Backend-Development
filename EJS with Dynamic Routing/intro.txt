@@ -1,0 +1,23 @@
+* Master EJS, Dynamic Routing and Project Setup
+
+- settings up parsers for form 
+- setting up ejs for ejs pages 
+- setting up public static files 
+- dynamic routing 
+    -> how to get data coming from frontend at backend route
+    /author/hiren
+    /author/amit
+    /profile/hiren 
+    /profile/amit 
+    -> dynamic routing required
+    -> sabse pahle browser per jao 
+    -> url likhiye jo apko chhiye and enter pressed 
+    -> ab us url route ko create kare 
+    -> response bhejiye kuch bhi 
+    -> ab usi url ko dynamic banana hai to us route ke aage : lagaaye
+    
+html 
+css 
+js 
+ejs 
+tailwind css 

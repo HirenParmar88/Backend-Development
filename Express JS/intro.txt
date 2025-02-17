@@ -1,0 +1,12 @@
+Express.js Framework
+
+* Introduction:-
+    -> npm package
+    -> framework - use - flow -work
+    -> manage everything from Request and response 
+    
+* Setting up basic express app
+* Routing
+* Middleware
+* Request and response handling 
+* Error handling 

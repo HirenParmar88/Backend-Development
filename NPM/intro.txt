@@ -1,0 +1,12 @@
+NPM understanding
+
+npm - node package manager
+-> module : node js core me installed aata hai 
+-> package : npm se download karte hai vo 
+
+ex. npm i express
+
+npm start 
+npm run dev 
+
+npm i chalk - colour package
