@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <div class="max-w-xl mx-auto p-8">
+        <div class="nav mb-10">
+            <a class="text-blue-500" href="/read">Read Users</a>
+        </div>
+        <h1 class="text-4xl font-semibold text-center mb-6">Create User</h1>
+        <form action="./index.ejs" class="space-y-6">
+            <div>
+                <input class="w-full px-5 py-3 border-2 border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg" type="text" placeholder="name" name="name"/>
+            </div>
+            <div>
+                <input class="w-full px-5 py-3 border-2 border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg" type="email" placeholder="email" name="email"/>
+            </div>
+            <div>
+                <input class="w-full px-5 py-3 border-2 border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg" type="text" placeholder="city" name="city"/>
+            </div>
+            <div>
+                <button class="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200 text-lg">Create User</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

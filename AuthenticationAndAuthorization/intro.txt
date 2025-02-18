@@ -1,0 +1,7 @@
+Authentication and authorization
+cookies and session
+
+role:-
+
+user 
+admin

@@ -1,0 +1,28 @@
+Data Storage: 
+types of DBS:- 
+SQL(tables format followed) 
+NoSQL(concept- data object me store hoga)
+
+NoSQL - mongoDB(objects me data store karega)
+
+Terminologies - collections, documents, schemas, keys, models 
+Database -> collection -> Document 
+
+code              Database
+-------------------------------------
+mongoose.connect    -> database create 
+modal create        -> collection 
+create  code        -> document 
+
+mongodb installation 
+mongodb connection
+modal
+crud
+
+MongoDB CRUD Operations :-
+create
+findOneAndUpdate
+findOne
+find
+findOneAndDelete
+deleteMany
