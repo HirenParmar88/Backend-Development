@@ -2,6 +2,13 @@ Authentication and authorization
 cookies and session
 
 role:-
-
 user 
 admin
+
+1.cookie set kare
+2.bcrypt use to password encryption and decryption
+3.jwt token
+
+password
+hiren : 
+$2b$10$jWfeeuZ88mC5Knu7BlxjfOMXdDoJTPvNxUVpA7WiXD5wq1vc79Mgy
