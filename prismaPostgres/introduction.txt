@@ -1,0 +1,7 @@
+1.Prisma:
+
+npm i prisma 
+npx prisma 
+npx prisma init 
+npm install @prisma/client
+npx prisma migrate dev --name create_user_schema
