@@ -1,7 +1,43 @@
-1.Prisma:
-
+1.Prisma with Postgres REST:
 npm i prisma 
 npx prisma 
 npx prisma init 
 npm install @prisma/client
 npx prisma migrate dev --name create_user_schema
+npx prisma studio
+
+* API URL :-
+POST : http://localhost:3000/api/user
+GET : http://localhost:3000/api/user
+PUT : http://localhost:3000/api/user/2
+DELETE : http://localhost:3000/api/user/2
+
+* Prisma Find Methods:
+1.findFirst
+2.findMany
+3.findUnique
+4.findFirstOrThrow
+5.findUniqueOrThrow
+
+* Prisma Update Methods:
+1.Update
+2.updateMany
+3.updateManyAndReturn
+4.upsert
+
+* Prisma Delete Methods:
+1.delete
+2.deleteMany
+
+* Prisma Insert Methods:
+1.create 
+2.createMany
+3.createManyAndReturn
+
+const getData = await prisma.user.findUnique({
+      where: { email: req.body.email },
+      select:{
+        email:true,
+        name:true,
+      }
+    });
