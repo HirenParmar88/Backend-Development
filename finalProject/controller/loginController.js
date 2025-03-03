@@ -29,16 +29,17 @@ const login = async (req, res) => {
     //generate jwt token
     const token = jwt.sign(
       {
-        name: userLogin.name,
         id: userLogin.id,
+        name: userLogin.name,
         email: userLogin.email,
+        role: userLogin.role
       },
       secretKey,
       { expiresIn: "1h" }
     );
     console.log("Token :", token);
     //to update token
-    await prisma.user.update({
+    const updatedUserdData = await prisma.user.update({
         where:{
             id:userLogin.id,
         },
@@ -49,7 +50,7 @@ const login = async (req, res) => {
     console.log("Login Successfully");
     return res
       .status(200)
-      .json({ message: "Login Successfully", data: userLogin });
+      .json({ message: "Login Successfully", data: updatedUserdData, code:200 });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
