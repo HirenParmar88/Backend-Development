@@ -37,14 +37,14 @@ model product{
   description String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-   userId Int @db.Integer //FK to user
+  userId Int @db.Integer //FK to user
   user user @relation(fields: [userId], references: [id])
   accessories accessories[] //one to many
 }
 
 model accessories{
   id Int @id @default(autoincrement())
-  accessories_name String
+  accessory_name String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   productId Int @db.Integer//FK to product
