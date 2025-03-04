@@ -8,24 +8,29 @@ const login = async (req, res) => {
   try {
     console.log("LOGIN ...");
     const { name, password } = req.body;
-    console.log(req.body);
+    console.log("name:" , name);
+    console.log("password",password);
+
     const userLogin = await prisma.user.findUnique({
       where: {
         name: name,
       },
     });
+
+    console.log('user data',userLogin);
+    
     if (!userLogin) {
       console.log("Invalid username or password");
       return res.status(400).json({ message: "Invalid username or password" });
     }
 
-    const plaintext = CryptoJS.AES.decrypt(
-      userLogin.password,
-      secretKey
-    ).toString(CryptoJS.enc.Utf8);
-    console.log("plaintext :-", plaintext);
-    console.log("userLogin data :", userLogin);
+    const decPassWord = CryptoJS.AES.decrypt(userLogin.password,secretKey).toString(CryptoJS.enc.Utf8);
+    console.log("decPassWord :-", decPassWord);
 
+    if(decPassWord != password){
+      console.log("Invalid password");
+      return res.status(400).json({ message: "Invalid password" });
+    }
     //generate jwt token
     const token = jwt.sign(
       {
@@ -36,20 +41,20 @@ const login = async (req, res) => {
       secretKey,
       { expiresIn: "1h" }
     );
-    console.log("Token :", token);
     //to update token
-    await prisma.user.update({
-        where:{
-            id:userLogin.id,
-        },
-        data:{
-            jwt:token
-        }
+    const updateUserData = await prisma.user.update({
+      where:{
+        name:userLogin.name,
+      },
+      data:{
+        jwt:token
+      }
     })
+    console.log("Token :", token);
     console.log("Login Successfully");
     return res
       .status(200)
-      .json({ message: "Login Successfully", data: userLogin });
+      .json({ message: "Login Successfully", data: updateUserData });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
