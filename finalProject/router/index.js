@@ -6,7 +6,7 @@ import accessoriesRouter from "./accessoriesRouter.js";
 
 const router=Router();
 
-router.use("/", authRouter)
+router.use("/auth", authRouter)
 router.use("/user", userRouter);
 router.use("/product", productRouter);
 router.use("/accessories", accessoriesRouter);

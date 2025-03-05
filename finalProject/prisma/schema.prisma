@@ -22,7 +22,7 @@ model user{
   role Role @default(user)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  product product[] //one-to-many relation with product
+  product product[]   //one-to-many relation with product
 }
 
 enum Role{
@@ -38,7 +38,7 @@ model product{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId Int @db.Integer //FK to user
-  user user @relation(fields: [userId], references: [id])
+  user user @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessories accessories[] //one to many
 }
 
@@ -48,5 +48,5 @@ model accessories{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   productId Int @db.Integer//FK to product
-  product product @relation(fields: [productId], references: [id])
+  product product @relation(fields: [productId], references: [id],onDelete: Cascade)
 }

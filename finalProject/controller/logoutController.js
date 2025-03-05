@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 //POST
 const logout = async (req, res) => {
   try {
-    console.log("Logout called...");
+    console.log("Logout called...",req.id);
 
     const token = req.headers["authorization"]?.split(" ")[1];
     console.log("tokent to logout :-", token);
@@ -19,18 +19,29 @@ const logout = async (req, res) => {
         return res.status(403).json({ message: "Invalid or expired token" });
       }
       const { id } = decoded;
-      const userLogout = await prisma.user.update({
+      const findUser = await prisma.user.findFirst({
         where: {
-          id: id,
+          name:req.body.name
         },
-        data: {
-          jwt: null,
-        },
+        select:{
+          jwt:true,
+          name:true,
+          email:true,
+          password:true
+        }
       });
-      console.log("userLogout data :", userLogout);
-      if (!userLogout) {
+      console.log("findUser data :", findUser);
+      if (!findUser) {
         return res.status(400).json({ message: "User not found" });
       }
+      const userLogout=await prisma.user.update({
+        where:{
+          id:req.id,
+        },
+        data:{
+          jwt: null,
+        }
+      })
       console.log("Logout Successfully");
       return res
         .status(200)
