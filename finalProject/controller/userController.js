@@ -47,14 +47,32 @@ const createUser=async(req,res)=>{
 
 //GET 
 const getAllUser=async(req,res)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    console.log("offset:",offset);
+    
     try {
-        console.log("get user call..");
-        const createUserData = await prisma.user.findMany()
+        console.log("get user API call..");
+        const createUserData = await prisma.user.findMany({
+            select:{
+                id:true,
+                name:true,
+                email:true,
+                role:true,
+            },
+            orderBy:{
+                id:"asc",
+            },
+            skip: offset,
+            take:limit,
+        })
         console.log("createUserData data :",createUserData);
+
         const userCount = await prisma.user.count()
         console.log("Get userCount :", userCount);
         
-        return res.status(200).json({code:200, count: userCount, message:"Get All User's Successfully", data:createUserData})
+        return res.status(200).json({code:200, success:true, currentPage:page, pageSize:limit, count: userCount, message:"Get All User's Successfully", data:createUserData})
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"Internal server error", code:500})
@@ -65,6 +83,7 @@ const getAllUser=async(req,res)=>{
 const deleteUser=async(req,res)=>{
     try {
         console.log("delete user API call..");
+
         //First, delete userId related all the products
         const userRelatedProduct = await prisma.product.deleteMany({
             where:{

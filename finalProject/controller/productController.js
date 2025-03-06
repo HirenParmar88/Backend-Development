@@ -1,6 +1,42 @@
 import prisma from "../db/db.config.js";
 import { productSchema, productUpdateSchema } from "../validations/productValidation.js";
 
+//Filtering and Sorting
+const filterProduct=async(req,res)=>{
+    const {product_name} = req.query;
+    try {
+        console.log("Filter product api call..");
+        let filterConditions={};
+        if(product_name || price){
+            filterConditions.product_name={
+                contains: product_name || price,
+                mode: 'insensitive',
+            }
+        }
+        const findProductData = await prisma.product.findMany({
+            select:{
+                id:true,
+                product_name:true,
+                price:true,
+                description:true,
+                userId:true,
+            },
+            where:filterConditions
+        })
+        console.log("Filter data :",findProductData);
+
+        const productCount = await prisma.product.count({
+            where:filterConditions,
+        })
+        console.log("Filter productCount :", productCount);
+        
+        return res.status(200).json({code:200, success:true, count:productCount, message:"Get Filter Product Successfully", data:findProductData})
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"Internal server error to Filter product"})
+    }
+}
+
 //POST
 const createProduct=async(req,res)=>{
     try {
@@ -32,15 +68,32 @@ const createProduct=async(req,res)=>{
 
 //GET 
 const getAllProduct=async(req,res)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
     try {
         console.log("get product api call..");
-        const createProductData = await prisma.product.findMany()
+        const createProductData = await prisma.product.findMany({
+            select:{
+                id:true,
+                product_name:true,
+                price:true,
+                description:true,
+                userId:true,
+            },
+            orderBy:{
+                id:"asc",
+            },
+            skip:offset,
+            take:limit
+        })
         //const createProductData = await prisma.$queryRaw`select * from product where id=2`; //prisma query raw
         console.log("createProductData data :",createProductData);
+
         const productCount = await prisma.product.count()
         console.log("Get productCount :", productCount);
         
-        return res.status(200).json({code:200, count:productCount, message:"Get All products's Successfully", data:createProductData})
+        return res.status(200).json({code:200, page:page, limit:limit, count:productCount, message:"Get All products's Successfully", data:createProductData})
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"Internal server error to add product"})
@@ -116,4 +169,4 @@ const updateProduct = async(req,res)=>{
         return res.status(500).json({message:"Internal server error", code:500})
     }
 }
-export {createProduct, getAllProduct, deleteProduct, updateProduct};
+export {createProduct, getAllProduct, deleteProduct, updateProduct, filterProduct};

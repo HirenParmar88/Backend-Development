@@ -2,14 +2,13 @@ import prisma from "../db/db.config.js";
 import CryptoJS from "crypto-js";
 import { secretKey } from "../utils/constant.js";
 import jwt from "jsonwebtoken";
-
 //POST
 const login = async (req, res) => {
   try {
     console.log("LOGIN ...");
     const { name, password } = req.body;
     console.log("name:" , name);
-    console.log("password",password);
+    console.log("password:",password);
 
     const userLogin = await prisma.user.findUnique({
       where: {
@@ -17,7 +16,7 @@ const login = async (req, res) => {
       },
     });
 
-    console.log('user data',userLogin);
+    //console.log('user data :',userLogin);
     
     if (!userLogin) {
       console.log("Invalid username or password");
@@ -27,10 +26,11 @@ const login = async (req, res) => {
     const decPassWord = CryptoJS.AES.decrypt(userLogin.password,secretKey).toString(CryptoJS.enc.Utf8);
     console.log("decPassWord :-", decPassWord);
 
-    if(decPassWord != password){
-      console.log("Invalid password");
-      return res.status(400).json({ message: "Invalid password" });
-    }
+    // if(decPassWord != password){
+    //   console.log("Invalid password");
+    //   return res.status(400).json({ message: "Invalid password" });
+    // }
+
     //generate jwt token
     const token = jwt.sign(
       {
@@ -40,7 +40,7 @@ const login = async (req, res) => {
         role: userLogin.role
       },
       secretKey,
-      { expiresIn: "1h" }
+      { expiresIn: "10h" }
     );
     //to update token
     const updatedUserdData = await prisma.user.update({
@@ -55,10 +55,10 @@ const login = async (req, res) => {
     console.log("Login Successfully");
     return res
       .status(200)
-      .json({ message: "Login Successfully", data: updatedUserdData, code:200 });
+      .json({code:200, success:true, message: "Login Successfully", data: updatedUserdData });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" , code:500});
   }
 };
 export default login;

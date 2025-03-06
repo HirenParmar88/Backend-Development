@@ -39,11 +39,25 @@ const addAccessories = async (req, res) => {
 
 //GET 
 const getAllAccessories=async(req,res)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
     try {
         console.log("get accessories api call..");
-        const getAccessoriesData = await prisma.accessories.findMany()
+        const getAccessoriesData = await prisma.accessories.findMany({
+            select:{
+                id:true,
+                accessory_name:true,
+                productId:true,
+            },
+            orderBy:{
+                id: "asc",
+            },
+            skip:offset,
+            take:limit,
+        })
         console.log("getAccessoriesData data :",getAccessoriesData);
-        return res.status(200).json({message:"Get All Accessories Successfully", data:getAccessoriesData, code:200})
+        return res.status(200).json({code:200,page:page, limit:limit, message:"Get All Accessories Successfully", data:getAccessoriesData})
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"Internal server error", code:500})
