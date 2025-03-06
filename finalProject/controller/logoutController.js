@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 //POST
 const logout = async (req, res) => {
   try {
-    console.log("Logout called...",req.id);
+    console.log("Logout called...");
 
     const token = req.headers["authorization"]?.split(" ")[1];
     console.log("tokent to logout :-", token);
