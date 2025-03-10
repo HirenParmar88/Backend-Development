@@ -48,8 +48,8 @@ const createUser=async(req,res)=>{
 //GET 
 const getAllUser=async(req,res)=>{
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = (page - 1) * limit;
+    const rawsPerPage = parseInt(req.query.rawsPerPage) || 10;
+    const offset = (page - 1) * rawsPerPage;
     console.log("offset:",offset);
     
     try {
@@ -60,19 +60,21 @@ const getAllUser=async(req,res)=>{
                 name:true,
                 email:true,
                 role:true,
+                createdAt:true,
+                updatedAt:true
             },
             orderBy:{
                 id:"asc",
             },
             skip: offset,
-            take:limit,
+            take:rawsPerPage,
         })
         console.log("createUserData data :",createUserData);
 
         const userCount = await prisma.user.count()
         console.log("Get userCount :", userCount);
         
-        return res.status(200).json({code:200, success:true, currentPage:page, pageSize:limit, count: userCount, message:"Get All User's Successfully", data:createUserData})
+        return res.status(200).json({code:200, success:true, page:page, rawsPerPage:rawsPerPage, count: userCount, message:"Get All User's Successfully", data:createUserData})
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"Internal server error", code:500})
