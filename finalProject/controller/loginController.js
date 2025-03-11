@@ -19,7 +19,7 @@ const login = async (req, res) => {
       return res.status(400).json({ code: 400, success: false, message: "Password cannot be empty" });
     }
 
-    const userLogin = await prisma.user.findUnique({
+    const userLogin = await prisma.user.findFirst({
       where: {
         name: name,
       },
@@ -31,10 +31,10 @@ const login = async (req, res) => {
     const decPassWord = CryptoJS.AES.decrypt(userLogin.password,secretKey).toString(CryptoJS.enc.Utf8);
     console.log("decPassWord :-", decPassWord);
 
-    // if(decPassWord != password){
-    //   console.log("Invalid password");
-    //   return res.status(400).json({ message: "Invalid password" });
-    // }
+    if(decPassWord != password){
+      console.log("Invalid password");
+      return res.status(400).json({ message: "Invalid password" });
+    }
 
     //generate jwt token
     const token = jwt.sign(
@@ -63,7 +63,6 @@ const login = async (req, res) => {
           name:true,
           role:true,
           updatedAt:true,
-          
         }
     })
     console.log("Token :", token);

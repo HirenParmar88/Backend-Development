@@ -7,11 +7,10 @@ import userSchemaValidate from "../validations/userValidation.js";
 const createUser=async(req,res)=>{
     try {
         console.log("create user call..");
-        const {name, password, email}=req.body;
         const result = await userSchemaValidate.validateAsync(req.body)
         console.log(result);
         
-        const ciphertext =await CryptoJS.AES.encrypt(result.password,secretKey).toString()
+        const ciphertext = CryptoJS.AES.encrypt(result.password,secretKey).toString()
         console.log("Cipher Text :", ciphertext);
         const findExistingUser=await prisma.user.findUnique({
             where:{
@@ -33,12 +32,17 @@ const createUser=async(req,res)=>{
                 email:true,
             }
         })
-        console.log("createUserData data :",createUserData);
-        return res.status(200).json({code: 200, success:true, message:"New User Created Successfully", data:createUserData})
+        if (createUserData) {
+            console.log("createUserData data :",createUserData);
+            return res.status(200).json({code: 200, success:true, message:"New User Created Successfully", data:createUserData})
+        }
     } catch (error) {
         if(error.isJoi === true){
             error.status = 422
             return res.status(422).json({message: error.details, code:422})
+        }
+        if(error.code === 'P2002'){
+            return res.status(400).json({message:error.message})
         }
         console.log(error);
         return res.status(500).json({message:"Internal server error", code:500})
@@ -85,7 +89,6 @@ const getAllUser=async(req,res)=>{
 const deleteUser=async(req,res)=>{
     try {
         console.log("delete user API call..");
-
         //First, delete userId related all the products
         const userRelatedProduct = await prisma.product.deleteMany({
             where:{
@@ -93,7 +96,6 @@ const deleteUser=async(req,res)=>{
             }
         })
         console.log(userRelatedProduct);
-        
         //Now, user delete
         const userdata=await prisma.user.delete({
             where:{
@@ -101,10 +103,8 @@ const deleteUser=async(req,res)=>{
             }
         })
         console.log("deleted userdata",userdata);
-
         const countDeletedUser = await prisma.user.count()
         console.log(countDeletedUser);
-        
         return res.status(200).json({ code:200, count:countDeletedUser, success:true, message:"users deleted successfully", data:userdata})
     } catch (error) {
         console.log(error)

@@ -55,22 +55,22 @@ const createProduct=async(req,res)=>{
             }
         })
         console.log("createProductData data :",createProductData);
-        return res.status(200).json({message:"New Product Added Successfully", data:createProductData})
+        return res.status(200).json({code:200, success:true, message:"New Product Added Successfully", data:createProductData})
     } catch (error) {
         if(error.isJoi === true){
             error.status = 422
-            return res.status(422).json({message: error.details, code:422})
+            return res.status(422).json({success:false, message: error.details, code:422})
         }
         console.log(error);
-        return res.status(500).json({message:"Internal server error"})
+        return res.status(500).json({code:500, success:false, message:"Internal server error"})
     }
 }
 
 //GET 
 const getAllProduct=async(req,res)=>{
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = (page - 1) * limit;
+    const rawsPerPage = parseInt(req.query.rawsPerPage) || 10;
+    const offset = (page - 1) * rawsPerPage;
     try {
         console.log("get product api call..");
         const createProductData = await prisma.product.findMany({
@@ -85,7 +85,7 @@ const getAllProduct=async(req,res)=>{
                 id:"asc",
             },
             skip:offset,
-            take:limit
+            take:rawsPerPage
         })
         //const createProductData = await prisma.$queryRaw`select * from product where id=2`; //prisma query raw
         console.log("createProductData data :",createProductData);
@@ -93,10 +93,10 @@ const getAllProduct=async(req,res)=>{
         const productCount = await prisma.product.count()
         console.log("Get productCount :", productCount);
         
-        return res.status(200).json({code:200, page:page, limit:limit, count:productCount, message:"Get All products's Successfully", data:createProductData})
+        return res.status(200).json({code:200, page:page, rawsPerPage:rawsPerPage, count:productCount, message:"Get All products's Successfully", data:createProductData})
     } catch (error) {
         console.log(error);
-        return res.status(500).json({message:"Internal server error to add product"})
+        return res.status(500).json({code:500, success:false, message:"Internal server error to add product"})
     }
 }
 
@@ -118,14 +118,14 @@ const deleteProduct = async(req,res)=>{
             }
         })
         console.log("deletedProductData :", deletedProductData);
-        return res.status(200).json({message:"product data deleted successfully", data:deletedProductData, code:200})
+        return res.status(200).json({code:200, success:true, message:"product data deleted successfully", data:deletedProductData})
     } catch (error) {
         console.log(error);
         if (error.code === 'P2025') {
             console.log("Record Not Found");
-            return res.status(404).json({message:"Product Record Not Found", code:404})
+            return res.status(404).json({code:404, success:false, message:"Product Record Not Found"})
         }
-        return res.status(500).json({message:"Internal server error", code:500})
+        return res.status(500).json({message:"Internal server error", code:500, success:false})
     }
 }
 
@@ -159,14 +159,14 @@ const updateProduct = async(req,res)=>{
             }
         })
         console.log("updatedProductData :", updatedProductData);
-        return res.status(200).json({message:"product data updated successfully", data:updatedProductData, code:200})
+        return res.status(200).json({message:"product data updated successfully", data:updatedProductData, code:200, success:true})
     } catch (error) {
         if(error.isJoi === true){
             error.status = 422
-            return res.status(422).json({message: error.details, code:422})
+            return res.status(422).json({message: error.details, code:422, success:false})
         }
         console.log(error);
-        return res.status(500).json({message:"Internal server error", code:500})
+        return res.status(500).json({message:"Internal server error", code:500, success:false})
     }
 }
 export {createProduct, getAllProduct, deleteProduct, updateProduct, filterProduct};
